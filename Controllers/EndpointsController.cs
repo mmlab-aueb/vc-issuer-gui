@@ -62,33 +62,37 @@ namespace Authorization_Server.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID, Name,URI")] Endpoint endpoint)
+        public async Task<IActionResult> EditPost(int? id)
         {
-            if (id != endpoint.ID)
+            if (id == null)
             {
                 return NotFound();
             }
-
-            try
+            var endpoint = await _context.endpoint.FirstOrDefaultAsync(m => m.ID == id);
+            if (await TryUpdateModelAsync<Endpoint>(
+                endpoint,
+                "",
+                s => s.Name, s => s.URI))
             {
-                _context.Update(endpoint);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            catch (DbUpdateException /* ex */)
-            {
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException /* ex */)
+                {
                     //Log the error (uncomment ex variable name and write a log.)
                     ModelState.AddModelError("", "Unable to save changes. " +
                         "Try again, and if the problem persists, " +
                         "see your system administrator.");
-             }
-
+                }
+            }
             return View(endpoint);
         }
 
-        
+
         public IActionResult Delete(int? id)
         {
             if (id == null)

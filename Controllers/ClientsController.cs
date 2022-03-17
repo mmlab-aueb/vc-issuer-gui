@@ -26,24 +26,6 @@ namespace Authorization_Server
         {
             return View(await _context.client.ToListAsync());
         }
-
-        /*
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var client = await _context.Client.FirstOrDefaultAsync(m => m.ID == id);
-            if (client == null)
-            {
-                return NotFound();
-            }
-
-            return View(client);
-        }
-        */
   
         public IActionResult Create()
         {
@@ -85,28 +67,33 @@ namespace Authorization_Server
         }
 
 
-        [HttpPost]
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,ClientId,ClientSecret")] Client client)
+        public async Task<IActionResult> EditPost(int? id)
         {
-            if (id != client.ID)
+            if (id == null)
             {
                 return NotFound();
             }
-            try
+            var client = await _context.client.FirstOrDefaultAsync(m => m.ID == id);
+            if (await TryUpdateModelAsync<Client>(
+                client,
+                "",
+                s => s.Name, s => s.ClientId, s => s.ClientSecret))
             {
-                _context.Update(client);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException /* ex */)
+                {
+                    //Log the error (uncomment ex variable name and write a log.)
+                    ModelState.AddModelError("", "Unable to save changes. " +
+                        "Try again, and if the problem persists, " +
+                        "see your system administrator.");
+                }
             }
-            catch (DbUpdateException /* ex */)
-            {
-                //Log the error (uncomment ex variable name and write a log.)
-                ModelState.AddModelError("", "Unable to save changes. " +
-                    "Try again, and if the problem persists, " +
-                    "see your system administrator.");
-            }
-
             return View(client);
         }
 
@@ -135,123 +122,5 @@ namespace Authorization_Server
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Authorizations(int? id)
-        {
-            /*
-             * TODO check what happens if a user puts a random id
-             */
-            if (id == null)
-            {
-                return NotFound();
-            }
-            var authorizations = await _context.authorization
-                .Where(m => m.ClientID == id).Include(q => q.Operation).Include(q => q.Operation.Resource).Include(q => q.Operation.Resource.Endpoint).ToListAsync();
-            return View(authorizations);
-        }
-
-        public async Task<IActionResult> AuthorizationsAdd(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            List<int> authorizations = _context.authorization.Where(q => q.ClientID == id).Select(a => a.OperationID).ToList();
-            var endpoints = await _context.operation.OrderBy(q=>q.ResourceID).Include(q=>q.Resource).Include(q => q.Resource.Endpoint).ToListAsync();
-            List<Operation> availableEndpoints = new List<Operation>();
-            foreach (var endpoint in endpoints)
-            {
-                if (authorizations.IndexOf(endpoint.ID) == -1)
-                {
-                    availableEndpoints.Add(endpoint);
-                }
-            }
-            return View(availableEndpoints);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AuthorizationsAdd(int id, List<int> enpoints)
-        {
-            var client = await _context.client.FirstAsync(b => b.ID == id);
-            if (client == null)
-            {
-                return NotFound();
-            }
-            foreach (var endpointId in enpoints)
-            {
-                var endpoint = await _context.operation.FirstOrDefaultAsync(q => q.ID == endpointId);
-                if (endpoint != null)
-                {
-                    var authorization = new Authorization();
-                    authorization.ClientID = id;
-                    authorization.OperationID = endpointId;
-                    _context.Add(authorization);
-                }
-            }
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Authorizations), new { id = id });
-        }
-
-        public async Task<IActionResult> AuthorizationsDelete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            var authorization = await _context.authorization.FirstOrDefaultAsync(m => m.ID == id);
-            if (authorization == null)
-            {
-                return NotFound();
-            }
-            _context.authorization.Remove(authorization);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Authorizations), new { id = authorization.ClientID });
-        }
-
-        public IActionResult RedirectURIAdd(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            return View();
-        }
-
-       
-
-        public IActionResult Secrets(int? id)
-        {
-            return View();
-        }
-
-        public async Task<IActionResult> SecretsConfirmed(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            var client = await _context.client.FirstOrDefaultAsync(m => m.ID == id);
-            if (client == null)
-            {
-                return NotFound();
-            }
-            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-            byte[] randomBytes = new byte[18];
-            rng.GetBytes(randomBytes);
-            client.ClientId = Base64UrlEncoder.Encode(randomBytes);
-            rng.GetBytes(randomBytes);
-            client.ClientSecret = Base64UrlEncoder.Encode(randomBytes);
-            _context.Update(client);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Index));
-        }
-
-
-        private bool ClientExists(int id)
-        {
-            return _context.client.Any(e => e.ID == id);
-        }
     }
 }

@@ -12,16 +12,22 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
                     <li class="breadcrumb-item"><a asp-controller="Clients" asp-action="Index">Clients</a></li>
-                    <li class="breadcrumb-item active">Authorizations</li>
+                    <li class="breadcrumb-item active">@ViewData["ClientName"]</li>
                 </ol>
             </div>
             <div class="panel-body">
                 <div class="btn-toolbar" role="toolbar" aria-label="...">
-                    <a class="btn" asp-action="AuthorizationsAdd" asp-route-id="@ViewContext.RouteData.Values["id"]">
+                    <a class="btn" asp-action="Add" asp-route-id="@ViewContext.RouteData.Values["id"]">
                         <img src="~/img/add.svg" alt="Add"><br />Add
                     </a>
                 </div>
                 <table class="table table-striped panel">
+                    <thead>
+                        <tr>
+                            <th style="width: 70%" scope="col">Authorizations</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
@@ -29,13 +35,13 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Operation.Resource.Endpoint.Name)/ @Html.DisplayFor(modelItem => item.Operation.Resource.Name) / @Html.DisplayFor(modelItem => item.Operation.URI)
                                 </td>
-                            <td>
-                                <a class="btn"asp-action="AuthorizationsDelete" asp-route-id="@item.ID">
-                                    <img src="~/img/delete.svg" alt="key" title="Delete">
-                                </a>
-                            </td>
-                        </tr>
-                    }
+                                <td>
+                                    <a class="btn" asp-action="Delete" asp-route-id="@item.ID">
+                                        <img src="~/img/delete.svg" alt="key" title="Delete">
+                                    </a>
+                                </td>
+                            </tr>
+                        }
                 </table>
             </div>
         </div>

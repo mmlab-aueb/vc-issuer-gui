@@ -14,12 +14,12 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
                     <li class="breadcrumb-item"><a asp-controller="Clients" asp-action="Index">Clients</a></li>
-                    <li class="breadcrumb-item"><a asp-controller="Clients" asp-action="Authorizations" asp-route-id="@ViewContext.RouteData.Values["id"]">Authorizations</a></li>
+                    <li class="breadcrumb-item"><a asp-action="Index" asp-route-id="@ViewContext.RouteData.Values["id"]">@ViewData["ClientName"]</a></li>
                     <li class="breadcrumb-item active">Add Authorization</li>
                 </ol>
             </div>
             <div class="panel-body">
-                <form asp-action="AuthorizationsAdd">
+                <form asp-action="Add">
 
                     @foreach (var endpoint in Model)
                     {
@@ -40,7 +40,7 @@
                     }
                     <div class="form-group">
                         <input type="submit" value="Save" class="btn btn-primary" />
-                        <a class="btn btn-link" asp-controller="Clients" asp-action="Authorizations" asp-route-id="@ViewContext.RouteData.Values["id"]" role="button">Cancel</a>
+                        <a class="btn btn-link" asp-action="Index" asp-route-id="@ViewContext.RouteData.Values["id"]" role="button">Cancel</a>
                     </div>
                 </form>
             </div>

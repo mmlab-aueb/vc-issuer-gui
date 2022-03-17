@@ -21,6 +21,12 @@
                     </a>
                 </div>
                 <table class="table table-striped panel">
+                    <thead>
+                        <tr>
+                            <th style="width: 70%" scope="col">Clients</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
@@ -31,7 +37,7 @@
                                         <img src="img/edit.svg" alt="edit" title="Edit"><br />
                                         <small>Edit</small>
                                     </a>
-                                    <a asp-action="Authorizations" asp-route-id="@item.ID" class="btn">
+                                    <a asp-controller="Authorizations" asp-action="Index" asp-route-id="@item.ID" class="btn">
                                         <img src="img/authorizations.svg" alt="Authorizations" title="Authorizations"><br />
                                         <small>Authorizations</small>
                                     </a>
