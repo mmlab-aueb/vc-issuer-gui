@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Authorization_Server.Models.Client>
+
+@{
+    ViewData["Title"] = "Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div id="home-firstdiv">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Clients</li>
+                </ol>
+            </div>
+            <div class="panel-body">
+                <div class="btn-toolbar" role="toolbar" aria-label="...">
+                    <a class="btn" asp-action="Create">
+                        <img src="~/img/add.svg" alt="Add"><br />Add
+                    </a>
+                </div>
+                <table class="table table-striped panel">
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@item.ID" class="btn">
+                                        <img src="img/edit.svg" alt="edit" title="Edit"><br />
+                                        <small>Edit</small>
+                                    </a>
+                                    <a asp-action="Authorizations" asp-route-id="@item.ID" class="btn">
+                                        <img src="img/authorizations.svg" alt="Authorizations" title="Authorizations"><br />
+                                        <small>Authorizations</small>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.ID" class="btn">
+                                        <img src="img/delete.svg" alt="key" title="Delete"><br />
+                                        <small>Delete</small>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+

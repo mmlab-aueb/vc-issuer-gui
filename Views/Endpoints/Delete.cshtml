@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Delete Endpoint";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div id="home-firstdiv">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active"><a asp-action="Index">Endpoints</a></li>
+                    <li class="breadcrumb-item active">Delete endpoint</li>
+                </ol>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="alert alert-danger" role="alert">
+                            <h4 class="alert-heading">Warning</h4>
+                            <p>Deleted endpoints cannot be recoverd.</p>
+                            <hr>
+                            <p class="mb-0">Are you sure you want to perform this action?</p>
+                            <form asp-action="Delete">
+                                <a class="btn btn-primary" asp-action="Index" role="button">Cancel</a>
+                                <input type="submit" value="Yes, delete" class="btn btn-danger" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

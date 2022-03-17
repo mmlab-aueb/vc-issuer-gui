@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Authorization_Server.Models.Operation>
+
+@{
+    ViewData["Title"] = "Operations";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="container">
+        <div id="home-firstdiv">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item"><a asp-controller="Endpoints" asp-action="Index">Endpoints</a></li>
+                        <li class="breadcrumb-item"><a asp-controller="Resources" asp-action="Index" asp-route-id="@ViewData["EndpointID"]"> @ViewData["EndpointName"]</a></li>
+                        <li class="breadcrumb-item active">@ViewData["ResourceName"]</li>
+                    </ol>
+                </div>
+                <div class="panel-body">
+                    <div class="btn-toolbar" role="toolbar" aria-label="...">
+                        <a class="btn" asp-action="Create" asp-route-id="@ViewContext.RouteData.Values["id"]">
+                            <img src="~/img/add.svg" alt="Add"><br />Add
+                        </a>
+                    </div>
+                    <table class="table table-striped panel">
+                        <thead>
+                            <tr>
+                                <th scope="col">Operations</th>
+                                <th ccope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Name)<br />
+                                        (@Html.DisplayFor(modelItem => item.URI))
+                                    </td>
+
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.ID" class="btn">
+                                            <img src="~/img/edit.svg" alt="edit" title="Edit"><br />
+                                            <small>Edit</small>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.ID" class="btn">
+                                            <img src="~/img/delete.svg" alt="key" title="Delete"><br />
+                                            <small>Delete</small>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>

@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Authorization_Server.Models.Operation>
+
+@{
+    ViewData["Title"] = "Add Authorization";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int cRId = -1;
+    int cEId = -1;
+}
+
+<div class="container">
+    <div id="home-firstdiv">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Clients" asp-action="Index">Clients</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Clients" asp-action="Authorizations" asp-route-id="@ViewContext.RouteData.Values["id"]">Authorizations</a></li>
+                    <li class="breadcrumb-item active">Add Authorization</li>
+                </ol>
+            </div>
+            <div class="panel-body">
+                <form asp-action="AuthorizationsAdd">
+
+                    @foreach (var endpoint in Model)
+                    {
+                        @if (endpoint.Resource.EndpointID != cEId)
+                        {
+                            cEId = endpoint.Resource.EndpointID;
+                            <big>@endpoint.Resource.Endpoint.Name</big><br />
+                        }
+
+                        @if (endpoint.ResourceID != cRId)
+                        {
+                            cRId = endpoint.ResourceID;
+                            <b>@endpoint.Resource.Name</b><br />
+                        }
+
+                        <input name="enpoints" type="checkbox" id="@endpoint.ID" value="@endpoint.ID" style="margin-left:1em" />
+                        <label for="@endpoint.ID"> @endpoint.Name (@endpoint.URI)</label><br>
+                    }
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                        <a class="btn btn-link" asp-controller="Clients" asp-action="Authorizations" asp-route-id="@ViewContext.RouteData.Values["id"]" role="button">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

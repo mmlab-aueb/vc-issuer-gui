@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Authorization_Server.Models.Authorization>
+
+@{
+    ViewData["Title"] = "Auhorizations";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div id="home-firstdiv">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="Clients" asp-action="Index">Clients</a></li>
+                    <li class="breadcrumb-item active">Authorizations</li>
+                </ol>
+            </div>
+            <div class="panel-body">
+                <div class="btn-toolbar" role="toolbar" aria-label="...">
+                    <a class="btn" asp-action="AuthorizationsAdd" asp-route-id="@ViewContext.RouteData.Values["id"]">
+                        <img src="~/img/add.svg" alt="Add"><br />Add
+                    </a>
+                </div>
+                <table class="table table-striped panel">
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Operation.Resource.Endpoint.Name)/ @Html.DisplayFor(modelItem => item.Operation.Resource.Name) / @Html.DisplayFor(modelItem => item.Operation.URI)
+                                </td>
+                            <td>
+                                <a class="btn"asp-action="AuthorizationsDelete" asp-route-id="@item.ID">
+                                    <img src="~/img/delete.svg" alt="key" title="Delete">
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

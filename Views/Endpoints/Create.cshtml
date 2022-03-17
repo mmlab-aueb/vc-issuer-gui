@@ -1,0 +1,46 @@
+﻿@model Authorization_Server.Models.Endpoint
+
+@{
+    ViewData["Title"] = "Add New Endpoint";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <div class="container">
+        <div id="home-firstdiv">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="breadcrumb-item active"><a asp-action="Index">Endpoints</a></li>
+                        <li class="breadcrumb-item active">Add new endpoint</li>
+                    </ol>
+                </div>
+                <div class="panel-body">
+       
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="URI" class="control-label"></label><br />
+                            <small>(The id will be included in the aud property of the generated VC)</small>
+                            <input asp-for="URI" class="form-control" />
+                            <span asp-validation-for="URI" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Add" class="btn btn-primary" />
+                            <a class="btn btn-link" asp-action="Index" role="button">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
